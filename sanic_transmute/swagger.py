@@ -13,9 +13,9 @@ SWAGGER_KEY = "_sanic_transmute_swagger"
 
 
 def get_swagger_spec(app):
-    if not hasattr(app, SWAGGER_KEY):
-        setattr(app, SWAGGER_KEY, SwaggerSpec())
-    return getattr(app, SWAGGER_KEY)
+    if not hasattr(app.ctx, SWAGGER_KEY):
+        setattr(app.ctx, SWAGGER_KEY, SwaggerSpec())
+    return getattr(app.ctx, SWAGGER_KEY)
 
 
 def add_swagger(app, json_route, html_route):
@@ -77,8 +77,8 @@ def create_swagger_json_handler(app, **kwargs):
 
 def _add_blueprint_specs(app, root_spec):
     for name, blueprint in app.blueprints.items():
-        if hasattr(blueprint, SWAGGER_KEY):
-            spec = getattr(blueprint, SWAGGER_KEY)
+        if hasattr(blueprint.ctx, SWAGGER_KEY):
+            spec = getattr(blueprint.ctx, SWAGGER_KEY)
             for path, path_item in spec.paths.items():
                 if blueprint.url_prefix:
                     path = blueprint.url_prefix + path
